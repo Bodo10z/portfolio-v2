@@ -1,0 +1,651 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="anonymous" />
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+<style>
+  html { scroll-behavior: smooth; }
+  section[id] { scroll-margin-top: 84px; }
+  body { margin: 0; background: #0a0c0b; color: #e8ebe9; font-family: "Space Grotesk", Helvetica, sans-serif; }
+  a { color: #00e5a0; text-decoration: none; }
+  a:hover { color: #7cffd0; }
+  ::selection { background: #00e5a0; color: #06120d; }
+  @media (hover: hover) and (pointer: fine) { body, a, button { cursor: none; } }
+  @keyframes om-caret { 0%, 49% { opacity: 1; } 50%, 100% { opacity: 0; } }
+  @media (max-width: 900px) {
+    [data-grid="hero"], [data-grid="split"] { grid-template-columns: 1fr !important; }
+    [data-grid="cards"] { grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)) !important; }
+    [data-grid="cert"] { grid-template-columns: 60px 1fr !important; gap: 14px !important; }
+    [data-grid="cert"] > span { display: none !important; }
+    [data-grid="cert"] > a { justify-self: start !important; grid-column: 2 !important; }
+  }
+  [data-card]:hover [data-live], [data-card]:focus-visible [data-live] { opacity: 1; transform: translateY(0); }
+  [data-card]:hover [data-shot], [data-card]:focus-visible [data-shot] { transform: scale(1.05); }
+  [data-card]:focus-visible { outline: 2px solid #00e5a0; outline-offset: 3px; }
+  [data-burger] { display: none; }
+  [data-mobilepanel] { display: none; }
+  @media (max-width: 620px) { [data-mobilepanel] { display: block; } }
+  @media (max-width: 1100px) {
+    [data-grid="stats"] { grid-template-columns: repeat(2, 1fr) !important; }
+  }
+  @media (max-width: 620px) {
+    [data-navlinks] { display: none !important; }
+    [data-burger] { display: inline-flex !important; }
+    [data-grid="cards"] { grid-template-columns: 1fr !important; }
+    [data-grid="stats"] { grid-template-columns: 1fr 1fr !important; }
+  }
+  @media (hover: none), (max-width: 760px) {
+    [data-sparkle] { display: none !important; }
+  }
+  @keyframes om-portrait { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-12px); } }
+  [data-portrait]:hover [data-portrait-img] { transform: scale(1.06); }
+  @media (max-width: 900px) { [data-portrait] { width: min(72vw, 300px) !important; } }
+  @media (max-width: 620px) { [data-portrait] { width: min(64vw, 240px) !important; } }
+  @media (prefers-reduced-motion: reduce) { [data-portrait] { animation: none !important; } }
+  @keyframes om-sparkle {
+    0%, 100% { opacity: 0; transform: translateY(0) scale(0.6); }
+    40% { opacity: 0.9; transform: translateY(-6px) scale(1); }
+    70% { opacity: 0.25; transform: translateY(-11px) scale(0.8); }
+  }
+  @media (prefers-reduced-motion: reduce) { [data-sparkle] { animation: none !important; opacity: 0.25 !important; } }
+  @keyframes om-float { 0%, 100% { transform: translateY(0) rotate(45deg); } 50% { transform: translateY(-4px) rotate(45deg); } }
+  [data-skill]:nth-child(1) [data-float] { animation-delay: 0ms; }
+  [data-skill]:nth-child(2) [data-float] { animation-delay: 220ms; }
+  [data-skill]:nth-child(3) [data-float] { animation-delay: 440ms; }
+  [data-skill]:nth-child(4) [data-float] { animation-delay: 660ms; }
+  [data-skill]:nth-child(5) [data-float] { animation-delay: 880ms; }
+  [data-skill]:nth-child(6) [data-float] { animation-delay: 1100ms; }
+  [data-skill]:nth-child(7) [data-float] { animation-delay: 1320ms; }
+  [data-skill]:nth-child(8) [data-float] { animation-delay: 1540ms; }
+  @media (prefers-reduced-motion: reduce) { [data-float] { animation: none !important; } }
+  @keyframes om-border { 0% { background-position: 0% 50%; } 100% { background-position: 200% 50%; } }
+  @keyframes om-glow {
+    0%, 100% { opacity: 0.42; transform: scale(0.94); }
+    50% { opacity: 0.85; transform: scale(1.06); }
+  }
+</style>
+</helmet>
+
+<div style="position:relative;color:#e8ebe9;font-family:'Space Grotesk',Helvetica,sans-serif;min-height:100vh">
+
+  <div aria-hidden="true" style="position:fixed;inset:0;z-index:-1;overflow:hidden;pointer-events:none">
+    <div style="position:absolute;top:-8%;left:-10%;width:52vw;height:52vw;border-radius:50%;background:radial-gradient(circle,rgba(0,229,160,0.10) 0%,rgba(0,229,160,0) 68%);filter:blur(18px);will-change:transform;transform:{{ layerSlow }}"></div>
+    <div style="position:absolute;top:38%;right:-14%;width:44vw;height:44vw;border-radius:50%;background:radial-gradient(circle,rgba(124,255,208,0.07) 0%,rgba(124,255,208,0) 70%);filter:blur(22px);will-change:transform;transform:{{ layerMid }}"></div>
+    <div style="position:absolute;inset:-20% 0 0;background-image:linear-gradient(#111614 1px,transparent 1px),linear-gradient(90deg,#111614 1px,transparent 1px);background-size:120px 120px;opacity:0.5;mask-image:radial-gradient(ellipse at 50% 30%,#000 0%,transparent 78%);-webkit-mask-image:radial-gradient(ellipse at 50% 30%,#000 0%,transparent 78%);background-position:{{ gridShift }}"></div>
+    <div style="position:absolute;inset:0;will-change:transform;transform:{{ layerFast }}">
+      <sc-for list="{{ sparkles }}" as="sp" hint-placeholder-count="0">
+        <span data-sparkle="" style="position:absolute;border-radius:50%;background:#00e5a0;box-shadow:0 0 8px rgba(0,229,160,0.85);animation-name:om-sparkle;animation-timing-function:ease-in-out;animation-iteration-count:infinite;left:{{ sp.left }};top:{{ sp.top }};width:{{ sp.size }};height:{{ sp.size }};animation-duration:{{ sp.dur }};animation-delay:{{ sp.delay }}"></span>
+      </sc-for>
+    </div>
+  </div>
+
+  <div aria-hidden="true" style="position:fixed;top:0;left:0;z-index:100;pointer-events:none;display:flex;align-items:center;justify-content:center;border:1px solid #00e5a0;border-radius:50%;mix-blend-mode:screen;transition:width 180ms cubic-bezier(0.22,0.61,0.36,1), height 180ms cubic-bezier(0.22,0.61,0.36,1), background 180ms cubic-bezier(0.22,0.61,0.36,1), opacity 180ms cubic-bezier(0.22,0.61,0.36,1);transform:{{ cursorTransform }};width:{{ cursorSize }};height:{{ cursorSize }};opacity:{{ cursorOpacity }};background:{{ cursorBg }};border-color:{{ cursorBorder }}">
+    <span style="width:4px;height:4px;border-radius:50%;background:#00e5a0;transition:opacity 180ms cubic-bezier(0.22,0.61,0.36,1);opacity:{{ cursorDotOpacity }}"></span>
+  </div>
+
+  <header data-nav="" style="position:sticky;top:0;z-index:50;display:flex;align-items:center;justify-content:space-between;gap:24px;padding:{{ navPad }};background:{{ navBg }};backdrop-filter:{{ navBlur }};-webkit-backdrop-filter:{{ navBlur }};border-bottom:1px solid {{ navBorder }};transition:background 320ms cubic-bezier(0.22,0.61,0.36,1), backdrop-filter 320ms cubic-bezier(0.22,0.61,0.36,1), border-color 320ms cubic-bezier(0.22,0.61,0.36,1), padding 320ms cubic-bezier(0.22,0.61,0.36,1)">
+    <a href="#hero" style="display:flex;align-items:center;gap:10px;color:#e8ebe9;font-weight:700;letter-spacing:-0.02em;font-size:17px">
+      <span style="width:9px;height:9px;border-radius:2px;background:#00e5a0;box-shadow:0 0 12px #00e5a0"></span>
+      Bodo Beloch
+    </a>
+    <nav style="display:flex;align-items:center;gap:clamp(16px,2.2vw,28px);font-size:14px;font-weight:500">
+      <div data-navlinks="" style="display:flex;flex-wrap:wrap;align-items:center;gap:clamp(16px,2.2vw,28px)">
+      <a href="#about" style="color:#9ba5a0" style-hover="color:#00e5a0">About</a>
+      <a href="#skills" style="color:#9ba5a0" style-hover="color:#00e5a0">Skills</a>
+      <a href="#projects" style="color:#9ba5a0" style-hover="color:#00e5a0">Projects</a>
+      <a href="#education" style="color:#9ba5a0" style-hover="color:#00e5a0">Education</a>
+      <a href="#contact" style="color:#9ba5a0" style-hover="color:#00e5a0">Contact</a>
+      </div>
+      <a href="#contact" data-magnetic="" onMouseMove="{{ magNav.onMove }}" onMouseLeave="{{ magNav.onLeave }}" style="padding:9px 18px;border:1px solid #00e5a0;border-radius:999px;color:#00e5a0;font-family:'JetBrains Mono',monospace;font-size:12px;letter-spacing:0.04em;transition:transform 220ms cubic-bezier(0.22,0.61,0.36,1), background 200ms cubic-bezier(0.22,0.61,0.36,1), color 200ms cubic-bezier(0.22,0.61,0.36,1);transform:{{ magNav.t }}" style-hover="background:#00e5a0;color:#06120d">LET'S TALK</a>
+      <button data-burger="" type="button" aria-label="Menü" aria-expanded="{{ menuOpen }}" onClick="{{ toggleMenu }}" style="flex-direction:column;justify-content:center;gap:5px;width:42px;height:42px;padding:0;border:1px solid #262c29;border-radius:10px;background:#0e1211;color:#00e5a0;align-items:center">
+        <span style="width:16px;height:1.5px;background:#00e5a0;transition:transform 240ms cubic-bezier(0.22,0.61,0.36,1);transform:{{ burgerTop }}"></span>
+        <span style="width:16px;height:1.5px;background:#00e5a0;transition:opacity 240ms cubic-bezier(0.22,0.61,0.36,1);opacity:{{ burgerMid }}"></span>
+        <span style="width:16px;height:1.5px;background:#00e5a0;transition:transform 240ms cubic-bezier(0.22,0.61,0.36,1);transform:{{ burgerBot }}"></span>
+      </button>
+    </nav>
+    <div data-mobilepanel="" style="position:absolute;left:0;right:0;top:100%;overflow:hidden;background:rgba(10,12,11,0.96);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border-bottom:1px solid #1c211f;transition:max-height 320ms cubic-bezier(0.22,0.61,0.36,1), opacity 240ms cubic-bezier(0.22,0.61,0.36,1);max-height:{{ panelHeight }};opacity:{{ panelOpacity }}">
+      <div style="display:flex;flex-direction:column;padding:8px 0">
+        <a href="#about" onClick="{{ closeMenu }}" style="padding:15px clamp(20px,5vw,48px);color:#c7cec9;font-size:16px">About</a>
+        <a href="#skills" onClick="{{ closeMenu }}" style="padding:15px clamp(20px,5vw,48px);color:#c7cec9;font-size:16px">Skills</a>
+        <a href="#projects" onClick="{{ closeMenu }}" style="padding:15px clamp(20px,5vw,48px);color:#c7cec9;font-size:16px">Projects</a>
+        <a href="#education" onClick="{{ closeMenu }}" style="padding:15px clamp(20px,5vw,48px);color:#c7cec9;font-size:16px">Education</a>
+        <a href="#contact" onClick="{{ closeMenu }}" style="padding:15px clamp(20px,5vw,48px);color:#c7cec9;font-size:16px">Contact</a>
+      </div>
+    </div>
+  </header>
+
+  <section id="hero" data-screen-label="Hero" data-grid="hero" style="display:grid;grid-template-columns:1.15fr 0.85fr;gap:clamp(36px,5vw,64px);align-items:center;padding:clamp(72px,10vw,120px) clamp(20px,5vw,48px) clamp(88px,12vw,140px);max-width:1320px;margin:0 auto">
+    <div style="display:flex;flex-direction:column;gap:28px;align-items:flex-start">
+      <span style="display:flex;align-items:center;gap:2px;min-height:16px;font-family:'JetBrains Mono',monospace;font-size:12px;letter-spacing:0.16em;color:#00e5a0">// {{ typedRole }}<span style="display:inline-block;width:7px;height:13px;background:#00e5a0;animation:om-caret 1s step-end infinite"></span></span>
+      <h1 style="margin:0;font-size:clamp(36px,6.4vw,76px);line-height:1.04;letter-spacing:-0.035em;font-weight:700;text-wrap:pretty">Hallo, ich bin<br /><span style="color:#00e5a0">{{ typedName }}</span><span style="display:inline-block;width:4px;height:0.72em;margin-left:6px;vertical-align:baseline;background:#00e5a0;animation:om-caret 1s step-end infinite"></span></h1>
+      <p style="margin:0;max-width:30ch;font-size:clamp(20px,2.2vw,27px);line-height:1.3;letter-spacing:-0.02em;color:#e8ebe9;text-wrap:pretty">Ich baue Websites, die auffallen – für Kunden, die mehr wollen als Standard.</p>
+      <p style="margin:0;max-width:52ch;font-size:clamp(16px,1.4vw,18px);line-height:1.65;color:#9ba5a0;text-wrap:pretty">Ich baue Websites ganz nach deinem Geschmack – kreativ, individuell und genau so, wie du sie dir vorstellst. Egal ob schlicht oder auffällig, ich setze deine Wünsche in Code um.</p>
+      <div style="display:flex;gap:14px;padding-top:8px">
+        <a href="#projects" data-magnetic="" onMouseMove="{{ magHero1.onMove }}" onMouseLeave="{{ magHero1.onLeave }}" style="padding:14px 26px;border-radius:8px;background:#00e5a0;color:#06120d;font-weight:700;font-size:15px;transition:transform 220ms cubic-bezier(0.22,0.61,0.36,1), background 200ms cubic-bezier(0.22,0.61,0.36,1);transform:{{ magHero1.t }}" style-hover="background:#7cffd0">Projekte ansehen</a>
+        <a href="#contact" data-magnetic="" onMouseMove="{{ magHero2.onMove }}" onMouseLeave="{{ magHero2.onLeave }}" style="padding:14px 26px;border-radius:8px;border:1px solid #262c29;color:#e8ebe9;font-weight:500;font-size:15px;transition:transform 220ms cubic-bezier(0.22,0.61,0.36,1), border-color 200ms cubic-bezier(0.22,0.61,0.36,1), color 200ms cubic-bezier(0.22,0.61,0.36,1);transform:{{ magHero2.t }}" style-hover="border-color:#00e5a0;color:#00e5a0">Kontakt</a>
+      </div>
+      <div style="display:flex;gap:36px;padding-top:32px;font-family:'JetBrains Mono',monospace;font-size:12px;color:#6d7873;letter-spacing:0.06em">
+        <span>AZUBI IN LÜBECK</span>
+        <span>OFFEN FÜR PROJEKTE</span>
+      </div>
+    </div>
+    <div style="display:flex;justify-content:center">
+      <div data-portrait="" style="position:relative;isolation:isolate;width:min(100%,380px);aspect-ratio:1;animation-name:om-portrait;animation-duration:6s;animation-timing-function:ease-in-out;animation-iteration-count:infinite">
+        <div style="position:absolute;inset:-12%;z-index:-1;border-radius:50%;background:radial-gradient(circle at 50% 50%, rgba(0,229,160,0.55) 0%, rgba(0,229,160,0.18) 45%, rgba(0,229,160,0) 72%);filter:blur(40px);animation:om-glow 4.5s ease-in-out infinite"></div>
+        <div style="position:absolute;inset:0;border-radius:50%;border:1px solid rgba(0,229,160,0.55);box-shadow:0 0 34px rgba(0,229,160,0.35), inset 0 0 22px rgba(0,229,160,0.12);animation:om-glow 4.5s ease-in-out infinite;pointer-events:none"></div>
+        <div style="width:100%;height:100%;border-radius:50%;overflow:hidden;background:#0e1211">
+          <img data-portrait-img="" src="images/profile.png" alt="Bodo Beloch" style="width:100%;height:100%;object-fit:cover;object-position:50% 22%;display:block;transition:transform 420ms cubic-bezier(0.22,0.61,0.36,1)" />
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="about" data-screen-label="About" style="padding:clamp(72px,9vw,110px) clamp(20px,5vw,48px);border-top:1px solid #1c211f">
+    <div data-grid="split" style="max-width:1320px;margin:0 auto;display:grid;grid-template-columns:280px 1fr;gap:clamp(36px,5vw,64px)">
+      <div style="display:flex;flex-direction:column;gap:10px">
+        <span style="font-family:'JetBrains Mono',monospace;font-size:12px;letter-spacing:0.16em;color:#00e5a0">01 — ABOUT</span>
+        <h2 style="margin:0;font-size:clamp(26px,3.6vw,34px);letter-spacing:-0.03em;line-height:1.15">Über mich</h2>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:28px;max-width:70ch">
+        <p style="margin:0;font-size:clamp(17px,1.6vw,20px);line-height:1.6;color:#c7cec9;text-wrap:pretty">Seit einem Jahr baue ich eigene Web-Projekte – von Steckbrief-Seiten über Mini-Spiele bis hin zu Fanpages.</p>
+        <p style="margin:0;font-size:16px;line-height:1.7;color:#9ba5a0;text-wrap:pretty">Nebenbei mache ich meine Ausbildung zum Fachinformatiker Systemintegration und bringe das Gelernte in jedes Projekt mit ein.</p>
+        <div data-grid="stats" style="display:grid;grid-template-columns:repeat(4,1fr);gap:clamp(14px,2vw,20px);padding-top:12px">
+          <div style="display:flex;flex-direction:column;gap:6px;padding:20px;border:1px solid #1c211f;border-radius:10px;background:#0e1211">
+            <span style="font-size:28px;font-weight:700;color:#00e5a0;font-variant-numeric:tabular-nums">{{ stat1 }}</span>
+            <span style="font-family:'JetBrains Mono',monospace;font-size:11px;color:#6d7873;letter-spacing:0.08em">JAHR ERFAHRUNG</span>
+          </div>
+          <div style="display:flex;flex-direction:column;gap:6px;padding:20px;border:1px solid #1c211f;border-radius:10px;background:#0e1211">
+            <span style="font-size:28px;font-weight:700;color:#00e5a0;font-variant-numeric:tabular-nums">{{ stat2 }}</span>
+            <span style="font-family:'JetBrains Mono',monospace;font-size:11px;color:#6d7873;letter-spacing:0.08em">PROJEKTE UMGESETZT</span>
+          </div>
+          <div style="display:flex;flex-direction:column;gap:6px;padding:20px;border:1px solid #1c211f;border-radius:10px;background:#0e1211">
+            <span style="font-size:28px;font-weight:700;color:#00e5a0;font-variant-numeric:tabular-nums">{{ stat3 }}</span>
+            <span style="font-family:'JetBrains Mono',monospace;font-size:11px;color:#6d7873;letter-spacing:0.08em">KATEGORIEN</span>
+          </div>
+          <div style="display:flex;flex-direction:column;gap:6px;padding:20px;border:1px solid #1c211f;border-radius:10px;background:#0e1211">
+            <span style="font-size:28px;font-weight:700;color:#00e5a0;font-variant-numeric:tabular-nums">{{ stat4 }}</span>
+            <span style="font-family:'JetBrains Mono',monospace;font-size:11px;color:#6d7873;letter-spacing:0.08em">MOTIVATION</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="skills" data-screen-label="Skills" style="padding:clamp(72px,9vw,110px) clamp(20px,5vw,48px);border-top:1px solid #1c211f;background:rgba(12,15,14,0.72)">
+    <div data-grid="split" style="max-width:1320px;margin:0 auto;display:grid;grid-template-columns:280px 1fr;gap:clamp(36px,5vw,64px)">
+      <div style="display:flex;flex-direction:column;gap:10px">
+        <span style="font-family:'JetBrains Mono',monospace;font-size:12px;letter-spacing:0.16em;color:#00e5a0">02 — SKILLS</span>
+        <h2 style="margin:0;font-size:clamp(26px,3.6vw,34px);letter-spacing:-0.03em;line-height:1.15">Skills &amp; Tools</h2>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:24px">
+        <div style="display:flex;align-items:center;gap:clamp(20px,3vw,36px);padding:clamp(26px,4vw,44px);border:1px solid #1c211f;border-radius:16px;background:#0e1211;transition:border-color 200ms cubic-bezier(0.22,0.61,0.36,1)" style-hover="border-color:#00e5a0">
+          <span data-skill="" style="display:flex;align-items:center;justify-content:center;flex-shrink:0;width:clamp(64px,8vw,92px);height:clamp(64px,8vw,92px);border:1px solid #262c29;border-radius:14px;background:#0a0c0b">
+            <span data-float="" style="width:14px;height:14px;background:#00e5a0;box-shadow:0 0 16px rgba(0,229,160,0.8);animation-name:om-float;animation-duration:3.4s;animation-timing-function:ease-in-out;animation-iteration-count:infinite"></span>
+          </span>
+          <div style="display:flex;flex-direction:column;gap:10px;flex:1;min-width:0">
+            <div style="display:flex;align-items:baseline;gap:14px;flex-wrap:wrap">
+              <h3 style="margin:0;font-size:clamp(38px,6vw,68px);line-height:1;letter-spacing:-0.04em;font-weight:700;color:#00e5a0">HTML</h3>
+              <span style="font-family:'JetBrains Mono',monospace;font-size:12px;letter-spacing:0.12em;color:#6d7873">HAUPTSKILL</span>
+            </div>
+            <p style="margin:0;font-size:clamp(15px,1.4vw,17px);line-height:1.6;color:#9ba5a0;text-wrap:pretty">Struktur und Aufbau meiner Seiten — von Steckbriefen über Mini-Spiele bis zur Fanpage.</p>
+            <div style="height:4px;border-radius:2px;background:#1c211f;margin-top:6px">
+              <div style="height:4px;border-radius:2px;background:#00e5a0;width:85%"></div>
+            </div>
+          </div>
+        </div>
+        <p style="margin:0;font-family:'JetBrains Mono',monospace;font-size:12px;letter-spacing:0.08em;color:#6d7873">AKTUELL IN ARBEIT: CSS · JAVASCRIPT</p>
+      </div>
+    </div>
+  </section>
+
+  <section id="projects" data-screen-label="Projects" style="padding:clamp(72px,9vw,110px) clamp(20px,5vw,48px);border-top:1px solid #1c211f">
+    <div style="max-width:1320px;margin:0 auto;display:flex;flex-direction:column;gap:48px">
+      <div style="display:flex;align-items:flex-end;justify-content:space-between;gap:32px">
+        <div style="display:flex;flex-direction:column;gap:10px">
+          <span style="font-family:'JetBrains Mono',monospace;font-size:12px;letter-spacing:0.16em;color:#00e5a0">03 — PROJECTS</span>
+          <h2 style="margin:0;font-size:clamp(26px,3.6vw,34px);letter-spacing:-0.03em;line-height:1.15">Ausgewählte Projekte</h2>
+        </div>
+        <a href="#contact" data-magnetic="" onMouseMove="{{ magAll.onMove }}" onMouseLeave="{{ magAll.onLeave }}" style="display:inline-block;font-family:'JetBrains Mono',monospace;font-size:12px;letter-spacing:0.08em;transition:transform 220ms cubic-bezier(0.22,0.61,0.36,1);transform:{{ magAll.t }}">GITHUB ↗</a>
+      </div>
+      <div data-grid="cards" style="display:grid;grid-template-columns:repeat(3,1fr);gap:24px">
+        <sc-for list="{{ projects }}" as="p" hint-placeholder-count="6">
+          <div style="padding:1px;border-radius:15px;background:#1c211f;background-size:200% 100%;perspective:900px;transition:background 200ms cubic-bezier(0.22,0.61,0.36,1)" style-hover="background:linear-gradient(90deg,#1c211f 0%,#00e5a0 25%,#7cffd0 50%,#00e5a0 75%,#1c211f 100%);background-size:200% 100%;animation:om-border 2.6s linear infinite">
+          <a data-card="" href="{{ p.url }}" target="_blank" rel="noopener noreferrer" onMouseMove="{{ p.onMove }}" onMouseLeave="{{ p.onLeave }}" style="display:flex;flex-direction:column;border-radius:14px;background:#0e1211;overflow:hidden;color:inherit;transform-style:preserve-3d;transition:transform 200ms cubic-bezier(0.22,0.61,0.36,1), box-shadow 200ms cubic-bezier(0.22,0.61,0.36,1);transform:{{ p.tilt }}" style-hover="box-shadow:0 18px 44px rgba(0,0,0,0.45)">
+            <div style="position:relative;aspect-ratio:16/10;overflow:hidden;background:#101514;border-radius:14px 14px 0 0">
+              <img data-shot="" src="{{ p.img }}" alt="{{ p.title }}" loading="lazy" style="width:100%;height:100%;object-fit:cover;object-position:50% 0;display:block;transition:transform 420ms cubic-bezier(0.22,0.61,0.36,1)" />
+              <span data-live="" style="position:absolute;top:12px;right:12px;padding:8px 14px;border-radius:999px;background:#00e5a0;color:#06120d;font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:500;letter-spacing:0.06em;opacity:0;transform:translateY(-6px);transition:opacity 220ms cubic-bezier(0.22,0.61,0.36,1), transform 220ms cubic-bezier(0.22,0.61,0.36,1)">LIVE ANSEHEN ↗</span>
+            </div>
+            <div style="display:flex;flex-direction:column;gap:14px;padding:24px">
+              <div style="display:flex;align-items:baseline;justify-content:space-between;gap:12px">
+                <h3 style="margin:0;font-size:19px;font-weight:500">{{ p.title }}</h3>
+                <span style="font-family:'JetBrains Mono',monospace;font-size:11px;color:#6d7873">{{ p.year }}</span>
+              </div>
+              <p style="margin:0;font-size:14px;line-height:1.6;color:#9ba5a0;text-wrap:pretty">{{ p.desc }}</p>
+              <div style="display:flex;flex-wrap:wrap;gap:8px;padding-top:4px">
+                <sc-for list="{{ p.stack }}" as="t" hint-placeholder-count="3">
+                  <span style="padding:5px 10px;border-radius:5px;background:#151a18;font-family:'JetBrains Mono',monospace;font-size:10px;color:#9ba5a0;letter-spacing:0.06em">{{ t.name }}</span>
+                </sc-for>
+              </div>
+              <span style="padding-top:8px;font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:0.06em;color:#00e5a0">LIVE ANSEHEN ↗</span>
+            </div>
+          </a>
+          </div>
+        </sc-for>
+      </div>
+    </div>
+  </section>
+
+  <sc-if value="{{ showCertificates }}" hint-placeholder-val="{{ true }}">
+  <section id="education" data-screen-label="Education" style="padding:clamp(72px,9vw,110px) clamp(20px,5vw,48px);border-top:1px solid #1c211f;background:rgba(12,15,14,0.72)">
+    <div data-grid="split" style="max-width:1320px;margin:0 auto;display:grid;grid-template-columns:280px 1fr;gap:clamp(36px,5vw,64px)">
+      <div style="display:flex;flex-direction:column;gap:10px">
+        <span style="font-family:'JetBrains Mono',monospace;font-size:12px;letter-spacing:0.16em;color:#00e5a0">04 — EDUCATION</span>
+        <h2 style="margin:0;font-size:clamp(26px,3.6vw,34px);letter-spacing:-0.03em;line-height:1.15">Ausbildung</h2>
+      </div>
+      <div style="display:flex;flex-direction:column">
+        <sc-for list="{{ certificates }}" as="c" hint-placeholder-count="1">
+          <div style="padding:1px;border-radius:11px;background:transparent;background-size:200% 100%;perspective:900px;transition:background 200ms cubic-bezier(0.22,0.61,0.36,1)" style-hover="background:linear-gradient(90deg,rgba(0,229,160,0) 0%,#00e5a0 25%,#7cffd0 50%,#00e5a0 75%,rgba(0,229,160,0) 100%);background-size:200% 100%;animation:om-border 2.6s linear infinite">
+          <div onMouseMove="{{ c.onMove }}" onMouseLeave="{{ c.onLeave }}" data-grid="cert" style="display:grid;grid-template-columns:60px minmax(200px,1fr) auto auto;gap:clamp(12px,1.6vw,24px);align-items:center;padding:22px 16px;border-radius:10px;background:#0c0f0e;border-bottom:1px solid #1c211f;transform-style:preserve-3d;transition:transform 200ms cubic-bezier(0.22,0.61,0.36,1);transform:{{ c.tilt }}">
+            <div style="width:52px;height:52px;border:1px solid #262c29;border-radius:8px;background-color:#101514;background-image:repeating-linear-gradient(135deg,#171d1b 0 6px,#101514 6px 12px)"></div>
+            <div style="display:flex;flex-direction:column;gap:5px">
+              <span style="font-size:16px;color:#e8ebe9">{{ c.title }}</span>
+              <span style="font-size:13px;color:#6d7873">{{ c.issuer }}</span>
+            </div>
+            <span style="font-family:'JetBrains Mono',monospace;font-size:11px;color:#9ba5a0;letter-spacing:0.06em">{{ c.id }}</span>
+            
+          </div>
+          </div>
+        </sc-for>
+      </div>
+    </div>
+  </section>
+  </sc-if>
+
+  <section id="contact" data-screen-label="Contact" style="padding:clamp(84px,10vw,130px) clamp(20px,5vw,48px);border-top:1px solid #1c211f">
+    <div data-grid="split" style="max-width:1320px;margin:0 auto;display:grid;grid-template-columns:1fr 0.8fr;gap:clamp(40px,6vw,80px);align-items:start">
+      <div style="display:flex;flex-direction:column;gap:24px;align-items:flex-start">
+        <span style="font-family:'JetBrains Mono',monospace;font-size:12px;letter-spacing:0.16em;color:#00e5a0">05 — CONTACT</span>
+        <h2 style="margin:0;font-size:clamp(32px,5.2vw,54px);line-height:1.06;letter-spacing:-0.03em;font-weight:700">Lass uns etwas bauen.</h2>
+        <p style="margin:0;max-width:46ch;font-size:17px;line-height:1.65;color:#9ba5a0;text-wrap:pretty">Lust auf ein Projekt zusammen? Schreib mir einfach.</p>
+        <a href="#contact" data-magnetic="" onMouseMove="{{ magMail.onMove }}" onMouseLeave="{{ magMail.onLeave }}" style="display:inline-block;font-size:clamp(18px,2.2vw,26px);font-weight:500;word-break:break-all;border-bottom:1px solid #00e5a0;padding-bottom:4px;margin-top:8px;transition:transform 220ms cubic-bezier(0.22,0.61,0.36,1);transform:{{ magMail.t }}">bodobeloch03@gmail.com</a>
+        <div style="display:flex;flex-wrap:wrap;gap:10px;padding-top:14px">
+          <a href="https://instagram.com/bodo_10z" target="_blank" rel="noopener" style="padding:11px 18px;border:1px solid #262c29;border-radius:999px;background:#0e1211;font-family:'JetBrains Mono',monospace;font-size:12px;letter-spacing:0.06em;color:#c7cec9;transition:border-color 200ms cubic-bezier(0.22,0.61,0.36,1), color 200ms cubic-bezier(0.22,0.61,0.36,1)" style-hover="border-color:#00e5a0;color:#00e5a0">INSTAGRAM @bodo_10z</a>
+          <a href="https://tiktok.com/@bobo_10z" target="_blank" rel="noopener" style="padding:11px 18px;border:1px solid #262c29;border-radius:999px;background:#0e1211;font-family:'JetBrains Mono',monospace;font-size:12px;letter-spacing:0.06em;color:#c7cec9;transition:border-color 200ms cubic-bezier(0.22,0.61,0.36,1), color 200ms cubic-bezier(0.22,0.61,0.36,1)" style-hover="border-color:#00e5a0;color:#00e5a0">TIKTOK @bobo_10z</a>
+        </div>
+      </div>
+      <form style="display:flex;flex-direction:column;gap:16px;padding:clamp(22px,3vw,32px);border:1px solid #1c211f;border-radius:14px;background:#0e1211">
+        <label style="display:flex;flex-direction:column;gap:8px;font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:0.1em;color:#6d7873">NAME
+          <input type="text" placeholder="Dein Name" style="padding:14px 16px;border:1px solid #262c29;border-radius:9px;background:#0a0c0b;color:#e8ebe9;font-family:'Space Grotesk',Helvetica,sans-serif;font-size:15px;letter-spacing:normal;outline:none;transition:border-color 200ms cubic-bezier(0.22,0.61,0.36,1)" style-focus="border-color:#00e5a0" />
+        </label>
+        <label style="display:flex;flex-direction:column;gap:8px;font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:0.1em;color:#6d7873">E-MAIL
+          <input type="email" placeholder="dein@mail.de" style="padding:14px 16px;border:1px solid #262c29;border-radius:9px;background:#0a0c0b;color:#e8ebe9;font-family:'Space Grotesk',Helvetica,sans-serif;font-size:15px;letter-spacing:normal;outline:none;transition:border-color 200ms cubic-bezier(0.22,0.61,0.36,1)" style-focus="border-color:#00e5a0" />
+        </label>
+        <label style="display:flex;flex-direction:column;gap:8px;font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:0.1em;color:#6d7873">NACHRICHT
+          <textarea rows="4" placeholder="Worum geht's?" style="padding:14px 16px;border:1px solid #262c29;border-radius:9px;background:#0a0c0b;color:#e8ebe9;font-family:'Space Grotesk',Helvetica,sans-serif;font-size:15px;letter-spacing:normal;line-height:1.55;resize:vertical;outline:none;transition:border-color 200ms cubic-bezier(0.22,0.61,0.36,1)" style-focus="border-color:#00e5a0"></textarea>
+        </label>
+        <button type="button" data-magnetic="" onMouseMove="{{ magSend.onMove }}" onMouseLeave="{{ magSend.onLeave }}" style="margin-top:4px;padding:15px 26px;border:none;border-radius:9px;background:#00e5a0;color:#06120d;font-family:'Space Grotesk',Helvetica,sans-serif;font-weight:700;font-size:15px;transition:transform 220ms cubic-bezier(0.22,0.61,0.36,1), background 200ms cubic-bezier(0.22,0.61,0.36,1);transform:{{ magSend.t }}" style-hover="background:#7cffd0">Absenden</button>
+      </form>
+    </div>
+  </section>
+
+  <footer style="display:flex;align-items:center;justify-content:space-between;gap:24px;padding:28px clamp(20px,5vw,48px);border-top:1px solid #1c211f;font-family:'JetBrains Mono',monospace;font-size:11px;color:#6d7873;letter-spacing:0.06em">
+    <span>© 2026 BODO BELOCH</span>
+    <div style="display:flex;gap:24px">
+      <a href="#hero">IMPRESSUM</a>
+      <a href="#hero">DATENSCHUTZ</a>
+      <a href="#hero">NACH OBEN ↑</a>
+    </div>
+  </footer>
+
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;revealAnimations&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:true,&quot;tsType&quot;:&quot;boolean&quot;,&quot;section&quot;:&quot;Motion&quot;},&quot;revealStagger&quot;:{&quot;editor&quot;:&quot;range&quot;,&quot;default&quot;:90,&quot;min&quot;:0,&quot;max&quot;:240,&quot;step&quot;:10,&quot;unit&quot;:&quot;ms&quot;,&quot;tsType&quot;:&quot;number&quot;,&quot;section&quot;:&quot;Motion&quot;},&quot;parallaxDepth&quot;:{&quot;editor&quot;:&quot;range&quot;,&quot;default&quot;:1,&quot;min&quot;:0,&quot;max&quot;:2,&quot;step&quot;:0.1,&quot;tsType&quot;:&quot;number&quot;,&quot;section&quot;:&quot;Motion&quot;},&quot;showEducation&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:true,&quot;tsType&quot;:&quot;boolean&quot;,&quot;section&quot;:&quot;Inhalt&quot;}}">
+class Component extends DCLogic {
+  state = { menuOpen: false, scrolled: false, scrollY: 0, typedName: "", typedRole: "", counts: [0, 0, 0, 0], tilt: {}, mag: {}, cursor: { x: -100, y: -100, on: false, visible: false } };
+
+  startTyping() {
+    const name = "Bodo Beloch";
+    const roles = ["FACHINFORMATIKER SYSTEMINTEGRATION (AZUBI)"];
+    let i = 0;
+    this.nameTimer = setInterval(() => {
+      i += 1;
+      this.setState({ typedName: name.slice(0, i) });
+      if (i >= name.length) {
+        clearInterval(this.nameTimer);
+        this.nameTimer = null;
+        this.cycleRoles(roles);
+      }
+    }, 70);
+  }
+
+  cycleRoles(roles) {
+    let r = 0, i = 0, deleting = false;
+    const tick = () => {
+      const word = roles[r % roles.length];
+      i = deleting ? i - 1 : i + 1;
+      this.setState({ typedRole: word.slice(0, i) });
+      let delay = deleting ? 40 : 85;
+      if (!deleting && i === word.length) {
+        if (roles.length === 1) return;
+        deleting = true; delay = 1600;
+      }
+      else if (deleting && i === 0) { deleting = false; r += 1; delay = 320; }
+      this.roleTimer = setTimeout(tick, delay);
+    };
+    this.roleTimer = setTimeout(tick, 400);
+  }
+
+  // Reveal state lives in data-attributes + a generated stylesheet, so React
+  // re-renders (typewriter, nav scroll) cannot wipe it like inline styles.
+  injectRevealCss(stagger) {
+    let tag = document.getElementById("om-reveal-css");
+    if (!tag) {
+      tag = document.createElement("style");
+      tag.id = "om-reveal-css";
+      document.head.appendChild(tag);
+    }
+    let css =
+      '[data-reveal]{opacity:0;transform:translateY(28px);' +
+      'transition:opacity 620ms cubic-bezier(0.22,0.61,0.36,1),transform 620ms cubic-bezier(0.22,0.61,0.36,1);' +
+      'will-change:opacity,transform}' +
+      '[data-reveal="in"]{opacity:1;transform:none}';
+    for (let n = 1; n <= 12; n++) {
+      css += '[data-reveal]:nth-child(' + n + '){transition-delay:' + (n - 1) * stagger + 'ms}';
+    }
+    tag.textContent = css;
+  }
+
+  setupCursor() {
+    this.onCursorMove = e => {
+      const overLink = !!(e.target.closest && e.target.closest("a,button,[data-magnetic]"));
+      if (this.cursorRaf) cancelAnimationFrame(this.cursorRaf);
+      this.cursorRaf = requestAnimationFrame(() =>
+        this.setState(s => {
+          const x = Math.round(e.clientX), y = Math.round(e.clientY);
+          const c = s.cursor;
+          if (c.x === x && c.y === y && c.on === overLink && c.visible) return null;
+          return { cursor: { x: x, y: y, on: overLink, visible: true } };
+        })
+      );
+    };
+    this.onCursorLeave = () =>
+      this.setState(s => ({ cursor: Object.assign({}, s.cursor, { visible: false }) }));
+    window.addEventListener("mousemove", this.onCursorMove, { passive: true });
+    document.addEventListener("mouseleave", this.onCursorLeave);
+  }
+
+  magnet(key, strength) {
+    const s = strength || 7;
+    this._mag = this._mag || {};
+    if (!this._mag[key]) {
+      this._mag[key] = {
+        onMove: e => {
+          const r = e.currentTarget.getBoundingClientRect();
+          const dx = (e.clientX - (r.left + r.width / 2)) / (r.width / 2);
+          const dy = (e.clientY - (r.top + r.height / 2)) / (r.height / 2);
+          const next = { x: Math.max(-1, Math.min(1, dx)) * s, y: Math.max(-1, Math.min(1, dy)) * s };
+          if (this._magRaf) cancelAnimationFrame(this._magRaf);
+          this._magRaf = requestAnimationFrame(() =>
+            this.setState(st => ({ mag: Object.assign({}, st.mag, { [key]: next }) }))
+          );
+        },
+        onLeave: () => this.setState(st => ({ mag: Object.assign({}, st.mag, { [key]: null }) }))
+      };
+    }
+    const m = (this.state.mag || {})[key];
+    return {
+      t: m ? "translate(" + m.x.toFixed(2) + "px," + m.y.toFixed(2) + "px)" : "translate(0px,0px)",
+      onMove: this._mag[key].onMove,
+      onLeave: this._mag[key].onLeave
+    };
+  }
+
+  tiltFor(key) {
+    const t = (this.state.tilt || {})[key];
+    const rx = t ? t.rx : 0, ry = t ? t.ry : 0;
+    return "perspective(900px) rotateX(" + rx + "deg) rotateY(" + ry + "deg)";
+  }
+
+  tiltHandlers(key) {
+    this._tilt = this._tilt || {};
+    if (!this._tilt[key]) {
+      this._tilt[key] = {
+        onMove: e => {
+          const r = e.currentTarget.getBoundingClientRect();
+          const px = (e.clientX - r.left) / r.width - 0.5;
+          const py = (e.clientY - r.top) / r.height - 0.5;
+          const next = { rx: -py * 7, ry: px * 9 };
+          if (this._tiltRaf) cancelAnimationFrame(this._tiltRaf);
+          this._tiltRaf = requestAnimationFrame(() =>
+            this.setState(s => ({ tilt: Object.assign({}, s.tilt, { [key]: next }) }))
+          );
+        },
+        onLeave: () => this.setState(s => ({ tilt: Object.assign({}, s.tilt, { [key]: null }) }))
+      };
+    }
+    return this._tilt[key];
+  }
+
+  setupCounters() {
+    const targets = [1, 5, 3, 100];
+    const about = document.getElementById("about");
+    if (!about) return;
+    const run = () => {
+      const dur = 1400, t0 = performance.now();
+      const step = now => {
+        const p = Math.min(1, (now - t0) / dur);
+        const e = 1 - Math.pow(1 - p, 3);
+        this.setState({ counts: targets.map(v => Math.round(v * e)) });
+        if (p < 1) this.countRaf = requestAnimationFrame(step);
+      };
+      this.countRaf = requestAnimationFrame(step);
+    };
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+      this.setState({ counts: targets });
+      return;
+    }
+    this.countObserver = new IntersectionObserver((entries, obs) => {
+      entries.forEach(entry => {
+        if (!entry.isIntersecting) return;
+        obs.unobserve(entry.target);
+        run();
+      });
+    }, { threshold: 0.35 });
+    this.countObserver.observe(about);
+  }
+
+  setupReveal() {
+    if (this.props.revealAnimations === false) return;
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+    this.injectRevealCss(this.props.revealStagger ?? 90);
+
+    const expand = el => {
+      const d = getComputedStyle(el).display;
+      const flexy = d === "grid" || d === "flex" || d === "inline-flex";
+      return flexy && el.children.length >= 3 ? Array.from(el.children) : [el];
+    };
+
+    this.revealObserver = new IntersectionObserver((entries, obs) => {
+      entries.forEach(entry => {
+        if (!entry.isIntersecting) return;
+        this.observerFired = true;
+        entry.target.setAttribute("data-reveal", "in");
+        obs.unobserve(entry.target);
+      });
+    }, { threshold: 0.05, rootMargin: "0px 0px -6% 0px" });
+
+    // Idempotent, latch-free: runs on mount, per scroll and on a watchdog.
+    // Items are (re-)observed every pass, so a stale/disconnected observer from a
+    // previous mount can never leave content stuck at opacity 0.
+    const reveal = el => {
+      el.setAttribute("data-reveal", "in");
+      this.revealObserver.unobserve(el);
+    };
+
+    this.scanReveal = () => {
+      Array.from(document.querySelectorAll("section[data-screen-label]")).forEach(sec => {
+        const wrap = sec.firstElementChild;
+        if (!wrap) return;
+        Array.from(wrap.children).flatMap(expand).forEach(el => {
+          if (!el.hasAttribute("data-reveal")) el.setAttribute("data-reveal", "");
+        });
+      });
+      const vh = window.innerHeight || 800;
+      Array.from(document.querySelectorAll('[data-reveal=""]')).forEach(el => {
+        const top = el.getBoundingClientRect().top;
+        if (top < vh * 0.94) reveal(el);
+        else this.revealObserver.observe(el);
+      });
+    };
+
+    this.scanReveal();
+    requestAnimationFrame(this.scanReveal);
+    // Watchdog: if the observer never fired, nothing stays hidden.
+    this.revealScanTimer = setTimeout(() => {
+      this.scanReveal();
+      if (!this.observerFired) {
+        Array.from(document.querySelectorAll('[data-reveal=""]')).forEach(reveal);
+        this.revealObserver.disconnect();
+      }
+    }, 1400);
+  }
+
+  componentDidMount() {
+    this.startTyping();
+    this.setupReveal();
+    this.setupCounters();
+    if (window.matchMedia("(hover: hover) and (pointer: fine)").matches) this.setupCursor();
+    this.onScroll = () => {
+      if (this.scrollRaf) return;
+      this.scrollRaf = requestAnimationFrame(() => {
+        this.scrollRaf = null;
+        const y = window.scrollY || document.documentElement.scrollTop;
+        this.setState({ scrolled: y > 24, scrollY: y });
+        if (this.scanReveal) this.scanReveal();
+      });
+    };
+    window.addEventListener("scroll", this.onScroll, { passive: true });
+    this.onScroll();
+  }
+
+  componentWillUnmount() {
+    window.removeEventListener("scroll", this.onScroll);
+    if (this.nameTimer) clearInterval(this.nameTimer);
+    if (this.roleTimer) clearTimeout(this.roleTimer);
+    if (this.revealObserver) this.revealObserver.disconnect();
+    if (this.revealScanTimer) clearTimeout(this.revealScanTimer);
+    if (this.countObserver) this.countObserver.disconnect();
+    if (this.countRaf) cancelAnimationFrame(this.countRaf);
+    if (this.onCursorMove) window.removeEventListener("mousemove", this.onCursorMove);
+    if (this.onCursorLeave) document.removeEventListener("mouseleave", this.onCursorLeave);
+    if (this.cursorRaf) cancelAnimationFrame(this.cursorRaf);
+  }
+
+  renderVals() {
+    const style = this.props.skillsDisplay ?? "tags";
+    const groups = [
+      { title: "Tech Stack", items: ["React", "Next.js", "TypeScript", "Tailwind CSS", "Framer Motion", "Figma", "Node.js", "Three.js"] }
+    ];
+    const levels = [95, 90, 85, 90, 80, 85, 75, 70];
+    const open = this.state.menuOpen;
+    const y = this.state.scrollY;
+    const depth = this.props.parallaxDepth ?? 1;
+    const sparkleSeed = [
+      [6, 14, 3.1], [17, 62, 4.4], [26, 31, 3.6], [34, 78, 5.2], [41, 12, 4.0],
+      [48, 55, 3.4], [56, 88, 4.8], [63, 24, 3.9], [71, 68, 5.4], [78, 41, 3.3],
+      [84, 9, 4.6], [88, 73, 4.1], [93, 35, 5.0], [11, 91, 3.7], [22, 47, 4.3],
+      [67, 5, 3.5], [36, 96, 4.9], [52, 19, 4.2]
+    ];
+    const c = this.state.cursor;
+    const size = c.on ? 46 : 20;
+    const s = this.state.scrolled;
+    return {
+      menuOpen: open,
+      toggleMenu: () => this.setState(s => ({ menuOpen: !s.menuOpen })),
+      closeMenu: () => this.setState({ menuOpen: false }),
+      panelHeight: open ? "340px" : "0px",
+      panelOpacity: open ? "1" : "0",
+      burgerTop: open ? "translateY(6.5px) rotate(45deg)" : "none",
+      burgerMid: open ? "0" : "1",
+      burgerBot: open ? "translateY(-6.5px) rotate(-45deg)" : "none",
+      layerSlow: "translate3d(0," + (-y * 0.06 * depth).toFixed(1) + "px,0)",
+      layerMid: "translate3d(0," + (-y * 0.14 * depth).toFixed(1) + "px,0)",
+      layerFast: "translate3d(0," + (-y * 0.24 * depth).toFixed(1) + "px,0)",
+      gridShift: "0px " + (y * 0.05 * depth).toFixed(1) + "px",
+      sparkles: sparkleSeed.map(([left, top, dur], i) => ({
+        left: left + "%",
+        top: top + "%",
+        dur: dur + "s",
+        delay: (i * 0.37).toFixed(2) + "s",
+        size: (i % 3 === 0 ? 3 : 2) + "px"
+      })),
+      cursorTransform: "translate(" + (c.x - size / 2) + "px," + (c.y - size / 2) + "px)",
+      cursorSize: size + "px",
+      cursorOpacity: c.visible ? "1" : "0",
+      cursorBg: c.on ? "rgba(0,229,160,0.16)" : "transparent",
+      cursorBorder: c.on ? "#7cffd0" : "#00e5a0",
+      cursorDotOpacity: c.on ? "0" : "1",
+      magNav: this.magnet("nav", 5),
+      magHero1: this.magnet("hero1", 8),
+      magHero2: this.magnet("hero2", 8),
+      magAll: this.magnet("all", 6),
+      magMail: this.magnet("mail", 6),
+      stat1: this.state.counts[0] + "+",
+      stat2: this.state.counts[1] + "+",
+      stat3: String(this.state.counts[2]),
+      stat4: this.state.counts[3] + "%",
+      typedName: this.state.typedName,
+      typedRole: this.state.typedRole,
+      navBg: s ? "rgba(10,12,11,0.72)" : "rgba(10,12,11,0)",
+      navBlur: s ? "blur(14px) saturate(140%)" : "blur(0px)",
+      navBorder: s ? "#1c211f" : "transparent",
+      navPad: s ? "14px clamp(20px,5vw,48px)" : "22px clamp(20px,5vw,48px)",
+      asTags: style === "tags",
+      asBars: style === "bars",
+      showCertificates: this.props.showEducation ?? true,
+      skillGroups: groups.map(g => ({
+        title: g.title,
+        count: String(g.items.length).padStart(2, "0"),
+        items: g.items.map((name, i) => {
+          const v = levels[i % levels.length];
+          return { name, label: v + "%", width: v + "%" };
+        })
+      })),
+      projects: [
+        { title: "Bodo Portfolio", year: "2026", url: "https://bodo10z.github.io", img: "images/project-portfolio.png", desc: "Meine persönliche Steckbrief-Website mit Vorstellung, Skills und Projekten.", stack: ["HTML", "Steckbrief"] },
+        { title: "Alysa Liu Fanpage", year: "2026", url: "https://bodo10z.github.io/alysa-liu/", img: "images/project-alysa.png", desc: "Fanseite für die Eiskunstläuferin Alysa Liu mit News, Bildern und Infos.", stack: ["HTML", "Fanpage"] },
+        { title: "Lucky Seven", year: "2025", url: "https://bodo10z.github.io/bobo-blackyjacky/", img: "images/project-lucky-seven.png", desc: "Mini-Spiel im Casino-Stil, bei dem man Blackjack gegen den Computer spielen kann.", stack: ["HTML", "Mini-Spiel"] }
+      ].map((p, i) => {
+        const h = this.tiltHandlers("p" + i);
+        return Object.assign({}, p, {
+          stack: p.stack.map(name => ({ name })),
+          tilt: this.tiltFor("p" + i),
+          onMove: h.onMove,
+          onLeave: h.onLeave
+        });
+      }),
+      certificates: [
+        { title: "Fachinformatiker Systemintegration", issuer: "Universität zu Lübeck · Azubi", id: "SEIT 2026" }
+      ].map((c, i) => {
+        const h = this.tiltHandlers("c" + i);
+        return Object.assign({}, c, {
+          tilt: this.tiltFor("c" + i),
+          onMove: h.onMove,
+          onLeave: h.onLeave
+        });
+      }),
+      magSend: this.magnet("send", 6)
+    };
+  }
+}
+</script>
+</body>
+</html>
